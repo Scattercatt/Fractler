@@ -1,2 +1,1 @@
-
-    0,     # Julia point R
+end = time.time()

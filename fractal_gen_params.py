@@ -19,6 +19,9 @@ input_values = [
 """
 
 import subprocess
+import multiprocessing as mp
+import time
+import math
 
 RENDER_COLUMN_EXECUTABLE = "render_column.exe"
 
@@ -63,7 +66,7 @@ class FracGenParams:
         # if not isinstance()
         # self.image_size: int = image_size
 
-    def render(self) -> list:
+    def single_thread_render(self) -> list:
         ret_map = []
         for column in range(self.image_size):   
             input_vals = [
@@ -92,3 +95,49 @@ class FracGenParams:
         
         
         return ret_map
+
+    def run_subprocess_render(self, executable: str, input_vals: list, output_vals: list) -> list:
+        string_input_vals = [str(val) for val in input_vals]
+        result = subprocess.run([f"./{executable}"] + string_input_vals, capture_output = True, text = True)
+        result_list = result.stdout.split(" ")
+        del result_list[-1]
+        return result_list
+
+    def multi_thread_render(self) -> list:
+
+        def modify_vals_column(input_vals: list, column: int) -> list:
+            ret = input_vals.copy()
+            ret[5] = column
+            return ret
+
+        input_vals = [
+                self.point_one[0],
+                self.point_one[1],
+                self.point_two[0],
+                self.point_two[1],
+                self.image_size,
+                0,
+                self.max_iterations,
+                self.fractal_to_render,
+                self.bailout_to_use,
+                self.julia,
+                self.julia_point[0],
+                self.julia_point[1]
+            ]
+        
+        ret_map = [0 for z in range(self.image_size)]
+        
+        process_pool = mp.Pool()
+        tasks = [
+            process_pool.apply_async(
+                self.run_subprocess_render, 
+                args = (RENDER_COLUMN_EXECUTABLE, modify_vals_column(input_vals = input_vals, column = proc), ret_map)
+            ) 
+            for proc in range(self.image_size)
+        ]
+
+        ret_map = [task.get() for task in tasks]
+        
+        return ret_map
+    
+    

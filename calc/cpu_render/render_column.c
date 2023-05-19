@@ -15,12 +15,12 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    // Arg 1 is X position of point 1
-    // Arg 2 is Y position of point 1
+    // Arg 1 is R position of point 1
+    // Arg 2 is I position of point 1
     cdouble p1 = strtod(argv[1], NULL) + strtod(argv[2], NULL) * I;
-
-    // Arg 3 is X position of point 2
-    // Arg 4 is Y position of point 2
+    
+    // Arg 3 is R position of point 2
+    // Arg 4 is I position of point 2
     cdouble p2 = strtod(argv[3], NULL) + strtod(argv[4], NULL) * I;
 
     // Arg 5 is the size of the desired output array
@@ -60,19 +60,22 @@ int main(int argc, char *argv[])
 
     // Column separation amount
     double column_separation_amount = (creal(p2) - creal(p1)) / (float) img_size;
+    double row_separation_amount = (cimag(p2) - cimag(p1)) / (float) img_size;
 
     // Column double to render across
-    double column_to_render_down = column_separation_amount * column_to_render;
+    double column_to_render_down = column_separation_amount * column_to_render + creal(p1);
 
 
     // Define data return var
-    int calculated_iterations[img_size];
+    int calculated_iterations[img_size]; 
 
     // Begin fractal calculation
     int pixel;
     double row;
-    for (row = cimag(p1), pixel = 0; row < cimag(p2); row += column_separation_amount, pixel++)
+    for (row = cimag(p1), pixel = 0; row < cimag(p2); row += row_separation_amount, pixel++)
     {
+
+        
         // Set initial Z and C based on is_julia
         cdouble Z, C;
         if (!is_julia)

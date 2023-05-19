@@ -1,7 +1,9 @@
+
+
 print("Program start")
 input_values = [
-    -1,    # Point 1 R
-    -1,    # Point 1 I
+    -4.353,    # Point 1 R
+    -0.323,    # Point 1 I
     1,     # Point 2 R
     1,     # Point 2 I
     100,   # Image size
