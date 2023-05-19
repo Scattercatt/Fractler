@@ -12,5 +12,6 @@ double cmod(cdouble my_complex)
 {
     double real = creal(my_complex);
     double imag = cimag(my_complex);
+    
     return sqrt(real * real + imag * imag);
 }

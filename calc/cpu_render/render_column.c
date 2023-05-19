@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
     {
         // Set initial Z and C based on is_julia
         cdouble Z, C;
-        if (is_julia)
+        if (!is_julia)
         {
             Z = C_ZERO;
 
@@ -88,18 +88,20 @@ int main(int argc, char *argv[])
             C = julia_point_real + julia_point_imag;
         }
         
-        int it = 0;
-        while (it < max_iterations)
+        int its = 0;
+        while (its < max_iterations)
         {
-            if (selected_bailout(Z, C) == true)
+            bool bailout_succeeded = selected_bailout(Z, C);
+            if (bailout_succeeded)
+            {
                 break;
-
+            }
             Z = selected_fractal(Z, C);
 
-            it++;
+            its++;
         }
 
-        calculated_iterations[pixel] = it;
+        calculated_iterations[pixel] = its;
     }
 
     for (int i = 0; i < img_size; i++)
