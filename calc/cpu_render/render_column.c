@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 
 
     // Define data return var
-    int calculated_iterations[img_size]; 
+    unsigned short calculated_iterations[img_size]; 
 
     // Begin fractal calculation
     int pixel;

@@ -6,14 +6,14 @@ import subprocess
 import time 
 
 if __name__ == "__main__":
-    ITERATIONS = 150000
+    ITERATIONS = 150
 
     test_fractal = FracGenParams(
         -2,    # Point 1 R
         -1.0,    # Point 1 I
         -0,     # Point 2 R
         1.0,     # Point 2 I
-        500,   # Image size
+        3000,   # Image size
         ITERATIONS,    # Max iterations
         0,     # Fractal to render. 0 is The Mandelbrot Set
         0,     # Bailout condition to use. 0 is basic

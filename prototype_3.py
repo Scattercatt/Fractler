@@ -1,7 +1,8 @@
 """
 This prototype runs an entire render multiprocessed
 """
-from fractal_gen_params import FracGenParams
+
+from ..fractal_gen_params import FracGenParams
 import subprocess
 import time 
 

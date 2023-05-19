@@ -125,7 +125,7 @@ class FracGenParams:
                 self.julia_point[1]
             ]
         
-        ret_map = [0 for z in range(self.image_size)]
+        ret_map = [0 for _ in range(self.image_size)]
         
         process_pool = mp.Pool()
         tasks = [
