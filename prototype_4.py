@@ -1,5 +1,5 @@
 """
-This prototype runs an entire render multiprocessed
+This prototype runs an entire render multiprocessed with compiler optimizations
 """
 from fractal_gen_params import FracGenParams
 import subprocess
@@ -25,7 +25,7 @@ if __name__ == "__main__":
     SOURCE_CODE_LOCATION = "./calc/cpu_render/render_column.c"
     COMPILED_PROGRAM_NAME = "render_column.exe"
 
-    subprocess.run(["gcc", SOURCE_CODE_LOCATION, "-o", COMPILED_PROGRAM_NAME])
+    subprocess.run(["gcc", SOURCE_CODE_LOCATION, "-o", COMPILED_PROGRAM_NAME, "-O3"])
 
     print("Compiled")
 

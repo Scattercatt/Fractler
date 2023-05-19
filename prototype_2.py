@@ -1,5 +1,8 @@
 print("Program start")
 
+"""
+This prototype runs an entire render, but single threaded
+"""
 import time
 from fractal_gen_params import FracGenParams
 
