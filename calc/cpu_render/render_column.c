@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../fractal_definitions.c"
-#include "../bailout_definitions.c"
+#include "./fractal_definitions.c"
+#include "./bailout_definitions.c"
 
 int main(int argc, char *argv[])
 {   
