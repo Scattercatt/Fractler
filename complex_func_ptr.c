@@ -1,1 +1,0 @@
-typedef complex double (*ComplexFuncPtr)(complex double, complex double);

@@ -1,14 +1,17 @@
-#include <complex.h>
-#include "complex_func_ptr.c"
+#include "func_ptrs.c"
 
-complex double mandelbrot_set(complex double Z, complex double C)
+cdouble mandelbrot_set(cdouble Z, cdouble C)
 {
     return Z * Z + C;
 }
-
-ComplexFuncPtr get_fractal_from_int(int num)
+cdouble burning_ship(cdouble Z, cdouble C)
 {
-    ComplexFuncPtr FRACTAL_LIST[] = {
+
+}
+
+FractalFuncPtr get_fractal_from_int(int num)
+{
+    FractalFuncPtr FRACTAL_LIST[] = {
         mandelbrot_set
     };
 

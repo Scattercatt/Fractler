@@ -2,11 +2,12 @@
 #include <stdlib.h>
 
 #include "../fractal_definitions.c"
-#include "../complex_tools.c"
+#include "../bailout_definitions.c"
 
 int main(int argc, char *argv[])
 {   
-    const int EXPECTED_ARG_COUNT = 9;
+    const int EXPECTED_ARG_COUNT = 13;
+    const cdouble C_ZERO = 0;
 
     if (argc < EXPECTED_ARG_COUNT)
     {
@@ -16,11 +17,11 @@ int main(int argc, char *argv[])
 
     // Arg 1 is X position of point 1
     // Arg 2 is Y position of point 1
-    complex double p1 = strtod(argv[1], NULL) + strtod(argv[2], NULL) * I;
+    cdouble p1 = strtod(argv[1], NULL) + strtod(argv[2], NULL) * I;
 
     // Arg 3 is X position of point 2
     // Arg 4 is Y position of point 2
-    complex double p2 = strtod(argv[3], NULL) + strtod(argv[4], NULL) * I;
+    cdouble p2 = strtod(argv[3], NULL) + strtod(argv[4], NULL) * I;
 
     // Arg 5 is the size of the desired output array
     int img_size = atoi(argv[5]);
@@ -28,9 +29,9 @@ int main(int argc, char *argv[])
     // Arg 6 is the column number
     int column_to_render = atoi(argv[6]);
 
-    if (column_to_render > img_size)
+    if (column_to_render >= img_size)
     {
-        printf("Render column cannot be greater than image size!");
+        printf("Render column cannot be greater than or equal to image size!");
         return 1;
     }
 
@@ -39,21 +40,71 @@ int main(int argc, char *argv[])
 
     // Arg 8 is the fractal to render. 
     int fractal_int = atoi(argv[8]);
-    ComplexFuncPtr fractal_ptr = get_fractal_from_int(fractal_int);
+    FractalFuncPtr selected_fractal = get_fractal_from_int(fractal_int);
 
-    print_complex(fractal_ptr(p1, p2));
+    // Arg 9 is the bailout condition
+    int bailout_int = atoi(argv[9]);
+    BailoutFuncPtr selected_bailout = get_bailout_from_int(bailout_int);
 
+    // Arg 10 is whether or not the image is a julia
+    bool is_julia = (atoi(argv[10]) != 0);
 
+    // Arg 11 and 12 are the julia points.
+    int julia_point_real, julia_point_imag;
+    if (is_julia)
+    {
+        julia_point_real = atoi(argv[11]);
+        julia_point_imag = atoi(argv[12]);
+    }
+    
 
     // Column separation amount
     double column_separation_amount = (creal(p2) - creal(p1)) / (float) img_size;
 
     // Column double to render across
-    double column_to_render_across = column_separation_amount * column_to_render;
+    double column_to_render_down = column_separation_amount * column_to_render;
 
-    for (double i = cimag(p1); i < cimag(p2); i += column_separation_amount)
+
+    // Define data return var
+    int calculated_iterations[img_size];
+
+    // Begin fractal calculation
+    int pixel;
+    double row;
+    for (row = cimag(p1), pixel = 0; row < cimag(p2); row += column_separation_amount, pixel++)
     {
+        // Set initial Z and C based on is_julia
+        cdouble Z, C;
+        if (is_julia)
+        {
+            Z = C_ZERO;
 
+            C = column_to_render_down + row * I;
+        }
+        else
+        {
+            Z = column_to_render_down + row * I;
+
+            C = julia_point_real + julia_point_imag;
+        }
+        
+        int it = 0;
+        while (it < max_iterations)
+        {
+            if (selected_bailout(Z, C) == true)
+                break;
+
+            Z = selected_fractal(Z, C);
+
+            it++;
+        }
+
+        calculated_iterations[pixel] = it;
+    }
+
+    for (int i = 0; i < img_size; i++)
+    {
+        printf("%d ", calculated_iterations[i]);
     }
 
     return 0;
