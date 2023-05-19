@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "..\fractal_definitions.c"
-#include <complex.h>
 
+#include "../fractal_definitions.c"
+#include "../complex_tools.c"
 
 int main(int argc, char *argv[])
 {   
-    const int EXPECTED_ARG_COUNT = 8;
+    const int EXPECTED_ARG_COUNT = 9;
 
     if (argc < EXPECTED_ARG_COUNT)
     {
@@ -28,14 +28,22 @@ int main(int argc, char *argv[])
     // Arg 6 is the column number
     int column_to_render = atoi(argv[6]);
 
-    // Arg 7 is the max iteration count
-    int max_iterations = atoi(argv[7])
-
     if (column_to_render > img_size)
     {
         printf("Render column cannot be greater than image size!");
         return 1;
     }
+
+    // Arg 7 is the max iteration count
+    int max_iterations = atoi(argv[7]);
+
+    // Arg 8 is the fractal to render. 
+    int fractal_int = atoi(argv[8]);
+    ComplexFuncPtr fractal_ptr = get_fractal_from_int(fractal_int);
+
+    print_complex(fractal_ptr(p1, p2));
+
+
 
     // Column separation amount
     double column_separation_amount = (creal(p2) - creal(p1)) / (float) img_size;
@@ -47,4 +55,6 @@ int main(int argc, char *argv[])
     {
 
     }
+
+    return 0;
 }
