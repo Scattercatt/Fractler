@@ -5,11 +5,9 @@
 #include <stdlib.h>
 #include <cuComplex.h>
 
-
-
-__global__ void vectorAdd(int* c, const int* a, const int* b)
+__global__ void compute_mandelbrot(cuDoubleComplex* c, const cuDoubleComplex* a, const cuDoubleComplex* b)
 {
-
+    
 }
 
 
@@ -25,11 +23,8 @@ int main(int argc, char* argv[])
     }*/
 
     // Create pointers
-    cuDoubleComplex* point_one = (cuDoubleComplex*)malloc(2 * sizeof(cuDoubleComplex));
-    cuDoubleComplex* point_two = (cuDoubleComplex*)malloc(2 * sizeof(cuDoubleComplex));
+
     
-    point_one[0] = make_cuDoubleComplex(strtod(argv[0], NULL), strtod(argv[1], NULL));
-    point_two[0] = make_cuDoubleComplex(strtod(argv[2], NULL), strtod(argv[3], NULL));
 
     // Arg 5 is the size of the desired output array
     int img_size = atoi(argv[5]);
@@ -45,6 +40,25 @@ int main(int argc, char* argv[])
 
     // Arg 7 is the max iteration count
     int max_iterations = atoi(argv[7]);
+
+
+
+    cuDoubleComplex* j;
+    cuDoubleComplex* input_b;
+    cuDoubleComplex* output;
+
+    cudaMalloc(&input_a, sizeof(cuDoubleComplex) * img_size * img_size);
+    cudaMalloc(&output, sizeof(cuDoubleComplex) * img_size * img_size);
+
+    double point_one_r = strtod(argv[0], NULL);
+    double point_one_i = strtod(argv[1], NULL);
+    double point_two_r = strtod(argv[2], NULL);
+    double point_two_i = strtod(argv[3], NULL);
+    
+    // point_one[0] = make_cuDoubleComplex(strtod(argv[0], NULL), strtod(argv[1], NULL));
+    // point_two[0] = make_cuDoubleComplex(strtod(argv[2], NULL), strtod(argv[3], NULL));
+
+    
 
     printf("%d",max_iterations);
 
